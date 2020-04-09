@@ -31,9 +31,10 @@ namespace Thandizo.SMS.ClientWorker
             loggerFactory.AddSerilog(logger);
             LogContext.ConfigureCurrentLogContext(loggerFactory);
             var smsBaseUrl = _configuration["BaseUrl"];
+            var smsSender = _configuration["SmsSender"];
 
             var builder = new ContainerBuilder();
-            builder.RegisterModule(new ServiceModule(smsBaseUrl));
+            builder.RegisterModule(new ServiceModule(smsBaseUrl, smsSender));
             builder.RegisterModule<ConsumersModule>();
             builder.Register(context =>
             {

@@ -8,16 +8,19 @@ namespace Thandizo.SMS.ClientWorker.Modules
     {
 
         private readonly string _baseUrl;
-        public ServiceModule(string baseUrl)
+        private readonly string _sender;
+
+        public ServiceModule(string baseUrl, string sender)
         {
             _baseUrl = baseUrl;
+            _sender = sender;
         }
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<SmsMessagingService>()
                 .As<IMessagingService>()
                  .WithParameter("baseUrl", _baseUrl)
-                 .WithParameter("sender", "Khusa");
+                 .WithParameter("sender", _sender);
         }
     }
 }
