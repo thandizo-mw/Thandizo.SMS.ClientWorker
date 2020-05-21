@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.IO;
+using Thandizo.DataModels.SMS;
 using Thandizo.SMS.ClientWorker.Consumers;
 using Thandizo.SMS.ClientWorker.Modules;
 
@@ -30,11 +31,18 @@ namespace Thandizo.SMS.ClientWorker
             ILoggerFactory loggerFactory = new LoggerFactory();
             loggerFactory.AddSerilog(logger);
             LogContext.ConfigureCurrentLogContext(loggerFactory);
-            var smsBaseUrl = _configuration["BaseUrl"];
-            var smsSender = _configuration["SmsSender"];
+
+            var smsConfiguration = new SmsConfiguration
+            {
+                BaseUrl = _configuration["BaseUrl"],
+                SmsSender = _configuration["SmsSender"],
+                RapidProPassword = _configuration["RapidProPassword"],
+                RapidProUserName = _configuration["RapidProUserName"],
+                RapidProSmsCode = _configuration["RapidProSmsCode"]
+            };
 
             var builder = new ContainerBuilder();
-            builder.RegisterModule(new ServiceModule(smsBaseUrl, smsSender));
+            builder.RegisterModule(new ServiceModule(smsConfiguration));
             builder.RegisterModule<ConsumersModule>();
             builder.Register(context =>
             {
